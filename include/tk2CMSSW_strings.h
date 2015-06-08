@@ -157,7 +157,10 @@ namespace insur {
     static const std::string xml_fileident = "tracker";
     static const std::string xml_newfileident = "newtracker";
     static const std::string xml_pixbar = "PixelBarrel";
+    static const std::string xml_2OTbar = "Phase2OTBarrel";
     static const std::string xml_pixfwd = "PixelForward"; 
+    static const std::string xml_2OTfwd = "Phase2OTForward";
+    static const std::string xml_2OTendcap = "Phase2OTEndcap";
     static const std::string xml_pixfwd_plus = "PixelForward[1]"; // CUIDADO was: "PixelForwardZPlus";
     static const std::string xml_pixfwd_minus = "PixelForward[2]"; // CUIDADO was: "PixelForwardZMinus";
     static const std::string xml_tracker = "Tracker";
@@ -185,6 +188,7 @@ namespace insur {
     static const std::string xml_det_tobdet = "TOBDet";
     static const std::string xml_tob_subdet = "TOBSubDet";
     static const std::string xml_subdet_layer = "PixelBarrelLayer";
+    static const std::string xml_subdet_2OT_layer = "Phase2OTBarrelLayer";
     static const std::string xml_subdet_rod = "PixelBarrelLadder";
     static const std::string xml_subdet_tobdet = "PixelBarrelModule";
     static const std::string xml_subdet_tobdet_1 = "PixelBarrelDet";
@@ -193,6 +197,7 @@ namespace insur {
     static const std::string xml_det_tiddet = "TIDDet";
     static const std::string xml_tid_subdet = "TIDSubDet";
     static const std::string xml_subdet_wheel = "PixelEndcapDisk";
+    static const std::string xml_subdet_2OT_wheel = "Phase2OTEndcapDisk";
     static const std::string xml_subdet_ring = "PixelEndcapPanel";
     static const std::string xml_subdet_tiddet = "PixelEndcapDet";
     static const std::string xml_apv_head = "TrackerAPVNumber";
