@@ -1237,7 +1237,7 @@ namespace insur {
     rotation3.add("<xmlattr>.phiX","180*deg");
     rotation3.add("<xmlattr>.thetaY","90*deg");
     rotation3.add("<xmlattr>.phiY","90*deg");
-    rotation3.add("<xmlattr>.thetaZ","`180*deg");
+    rotation3.add("<xmlattr>.thetaZ","180*deg");
     rotation3.add("<xmlattr>.phiZ","0*deg");
       
     ptree& logicSec = tree.add("DDDefinition.LogicalPartSection", "");
