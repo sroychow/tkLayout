@@ -1279,13 +1279,13 @@ namespace insur {
         ptree& translation = position.add("Translation","");
         std::stringstream ss;
         ss << std::setprecision(3) << p.trans.dx << "*mm";
-        translation.add("<xmlattr>.dx",ss.str());
+        translation.add("<xmlattr>.x",ss.str());
         ss.str("");
         ss << std::setprecision(3) << p.trans.dy << "*mm";
-        translation.add("<xmlattr>.dy",ss.str());
+        translation.add("<xmlattr>.y",ss.str());
         ss.str("");
         ss << std::setprecision(3) << p.trans.dz << "*mm";
-        translation.add("<xmlattr>.dz",ss.str());
+        translation.add("<xmlattr>.z",ss.str());
       }
     }
 
