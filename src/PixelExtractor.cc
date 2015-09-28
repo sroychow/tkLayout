@@ -635,7 +635,7 @@ namespace insur {
 
         algopar.str("");
         ring_algo.vecpar.name="Center";
-        ring_algo.vecpar.type="Numeric";
+        ring_algo.vecpar.type="numeric";
         ring_algo.vecpar.nEntries="3";
         ring_algo.vecpar.values.push_back(0);
         ring_algo.vecpar.values.push_back(0);
