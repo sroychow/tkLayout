@@ -1376,13 +1376,17 @@ namespace insur {
       param.add("<xmlattr>.value",s.parameter.second);
       for(auto m: s.moduletypes){
         ptree& param1 = spec.add("Parameter","");
-        param1.add("<xmlattr>.PixelROCRows", m.rocrows);
+        param1.add("<xmlattr>.name", "PixelROCRows");
+        param1.add("<xmlattr>.value", m.rocrows);
         ptree& param2 = spec.add("Parameter","");
-        param2.add("<xmlattr>.PixelROCCols", m.roccols);
+        param2.add("<xmlattr>.name", "PixelROCCols");
+        param2.add("<xmlattr>.value", m.roccols);
         ptree& param3 = spec.add("Parameter","");
-        param3.add("<xmlattr>.PixelROC_X", m.rocx);
+        param3.add("<xmlattr>.name", "PixelROC_X");
+        param3.add("<xmlattr>.value", m.rocx);
         ptree& param4 = spec.add("Parameter","");
-        param4.add("<xmlattr>.PixelROC_Y", m.rocy);
+        param4.add("<xmlattr>.name", "PixelROC_Y");
+        param4.add("<xmlattr>.value", m.rocy);
       } 
     }
     write_xml(xmlpath+"pixelStructureTopology_test.xml", tree_topo, std::locale(), settings);
@@ -1442,7 +1446,7 @@ namespace insur {
     ptree& dead_spec = specParProdSec.add("SpecPar","");
     dead_spec.add("<xmlattr>.name","tracker-dead-pixel");
 
-    ptree& barrel_partSel = dead_spec.add("PartSelctor","");
+    ptree& barrel_partSel = dead_spec.add("PartSelector","");
     barrel_partSel.add("<xmlattr>.path","//" + xml_phaseII_pixbar );
 
     ptree& endcap_partSel = dead_spec.add("PartSelector","");
