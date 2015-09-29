@@ -1338,7 +1338,7 @@ namespace insur {
     spec.add("<xmlattr>.name","FullTrackerPar");
 
     ptree& partSel = spec.add("PartSelector","");
-    partSel.add("<xmlattr>.namepath","//Tracker");
+    partSel.add("<xmlattr>.path","//Tracker");
 
     ptree& param = spec.add("Parameter","");
     param.add("<xmlattr>.name","TkDDDStructure");
