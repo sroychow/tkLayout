@@ -635,7 +635,7 @@ namespace insur {
 
         algopar.str("");
         ring_algo.vecpar.name="Center";
-        ring_algo.vecpar.type="Numeric";
+        ring_algo.vecpar.type="numeric";
         ring_algo.vecpar.nEntries="3";
         ring_algo.vecpar.values.push_back(0);
         ring_algo.vecpar.values.push_back(0);
@@ -1237,7 +1237,7 @@ namespace insur {
     rotation3.add("<xmlattr>.phiX","180*deg");
     rotation3.add("<xmlattr>.thetaY","90*deg");
     rotation3.add("<xmlattr>.phiY","90*deg");
-    rotation3.add("<xmlattr>.thetaZ","`180*deg");
+    rotation3.add("<xmlattr>.thetaZ","180*deg");
     rotation3.add("<xmlattr>.phiZ","0*deg");
       
     ptree& logicSec = tree.add("DDDefinition.LogicalPartSection", "");
@@ -1279,13 +1279,13 @@ namespace insur {
         ptree& translation = position.add("Translation","");
         std::stringstream ss;
         ss << std::setprecision(3) << p.trans.dx << "*mm";
-        translation.add("<xmlattr>.dx",ss.str());
+        translation.add("<xmlattr>.x",ss.str());
         ss.str("");
         ss << std::setprecision(3) << p.trans.dy << "*mm";
-        translation.add("<xmlattr>.dy",ss.str());
+        translation.add("<xmlattr>.y",ss.str());
         ss.str("");
         ss << std::setprecision(3) << p.trans.dz << "*mm";
-        translation.add("<xmlattr>.dz",ss.str());
+        translation.add("<xmlattr>.z",ss.str());
       }
     }
 
@@ -1338,7 +1338,7 @@ namespace insur {
     spec.add("<xmlattr>.name","FullTrackerPar");
 
     ptree& partSel = spec.add("PartSelector","");
-    partSel.add("<xmlattr>.namepath","//Tracker");
+    partSel.add("<xmlattr>.path","//Tracker");
 
     ptree& param = spec.add("Parameter","");
     param.add("<xmlattr>.name","TkDDDStructure");
@@ -1376,13 +1376,17 @@ namespace insur {
       param.add("<xmlattr>.value",s.parameter.second);
       for(auto m: s.moduletypes){
         ptree& param1 = spec.add("Parameter","");
-        param1.add("<xmlattr>.PixelROCRows", m.rocrows);
+        param1.add("<xmlattr>.name", "PixelROCRows");
+        param1.add("<xmlattr>.value", m.rocrows);
         ptree& param2 = spec.add("Parameter","");
-        param2.add("<xmlattr>.PixelROCCols", m.roccols);
+        param2.add("<xmlattr>.name", "PixelROCCols");
+        param2.add("<xmlattr>.value", m.roccols);
         ptree& param3 = spec.add("Parameter","");
-        param3.add("<xmlattr>.PixelROC_X", m.rocx);
+        param3.add("<xmlattr>.name", "PixelROC_X");
+        param3.add("<xmlattr>.value", m.rocx);
         ptree& param4 = spec.add("Parameter","");
-        param4.add("<xmlattr>.PixelROC_Y", m.rocy);
+        param4.add("<xmlattr>.name", "PixelROC_Y");
+        param4.add("<xmlattr>.value", m.rocy);
       } 
     }
     write_xml(xmlpath+"pixelStructureTopology_test.xml", tree_topo, std::locale(), settings);
@@ -1442,7 +1446,7 @@ namespace insur {
     ptree& dead_spec = specParProdSec.add("SpecPar","");
     dead_spec.add("<xmlattr>.name","tracker-dead-pixel");
 
-    ptree& barrel_partSel = dead_spec.add("PartSelctor","");
+    ptree& barrel_partSel = dead_spec.add("PartSelector","");
     barrel_partSel.add("<xmlattr>.path","//" + xml_phaseII_pixbar );
 
     ptree& endcap_partSel = dead_spec.add("PartSelector","");
