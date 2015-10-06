@@ -881,7 +881,7 @@ namespace insur {
     emodactive_shape.dx = emodwafer_shape.dx - cut_dx;
     emodactive_shape.dy = emodwafer_shape.dy - cut_dy;
     emodactive_shape.dz = emodwafer_shape.dz - cut_dz;
-    cmsswXmlInfo.shapes.push_back(emodwafer_shape);
+    cmsswXmlInfo.shapes.push_back(emodactive_shape);
     //flip_shape  = emodactive_shape;
     //flip_shape.name_tag = emodactive_shape.name_tag + "FLIPPED";
     //cmsswXmlInfo.shapes.push_back(flip_shape);//flip module
@@ -911,7 +911,7 @@ namespace insur {
     emodwafer_pos.trans.dz = 0.;
     emodwafer_pos.parent_tag = emod_pos.child_tag;
     emodwafer_pos.child_tag = emodwafer_logic.shape_tag;
-    cmsswXmlInfo.positions.push_back(emod_pos);
+    cmsswXmlInfo.positions.push_back(emodwafer_pos);
     //flip_pos = emodwafer_pos;
     //flip_pos.parent_tag += "FLIPPED";
     //flip_pos.child_tag += "FLIPPED";
