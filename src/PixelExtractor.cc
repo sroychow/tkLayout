@@ -807,7 +807,7 @@ namespace insur {
     chip_logic.name_tag = chip_shape.name_tag;
     chip_logic.shape_tag = "pixel_test:" + chip_shape.name_tag;
     stringstream chip_logic_mat;
-    chip_logic_mat << "pixe:bottomInactiveCompositeEModule" << ringNo << "Disc" << discno;
+    chip_logic_mat << "pixel_test:bottomInactiveCompositeEModule" << ringNo << "Disc" << discno;
     chip_logic.material_tag = chip_logic_mat.str();
     cmsswXmlInfo.logic.push_back(chip_logic);
     //flip_logic = chip_logic;
