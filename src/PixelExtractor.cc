@@ -463,6 +463,9 @@ namespace insur {
 
     for( auto& bs: bser ) {
 
+      if (!bs.getLocalMasses().size())
+        continue;
+
       std::stringstream sname,matname;
       sname << xml_phaseII_pixbar << xml_base_serf << "R" << (int)(bs.getInnerRadius()) << "Z" << (int)(bs.getZOffset());
       bser_shape.name_tag = sname.str();
@@ -992,6 +995,9 @@ namespace insur {
     comp.method = wt;
 
     for( auto& bs: bser ) {
+
+      if (!bs.getLocalMasses().size())
+        continue;
 
       std::stringstream sname,matname;
       sname << xml_phaseII_pixecap  << xml_base_serf << "R" << (int)(bs.getInnerRadius())
