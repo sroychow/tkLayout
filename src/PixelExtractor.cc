@@ -255,6 +255,10 @@ namespace insur {
     module_spec.parameter.first = xml_tkddd_structure;
     module_spec.parameter.second = xml_phaseII_pixbardet;
 
+    RILengthInfo ril;
+    double rtotal = 0.0, itotal = 0.0;
+    unsigned count = 0;
+
     for( unsigned int i = 0; i<moduleVec.size(); i++ ) {
       auto& module = moduleVec.at(i);
 
@@ -427,6 +431,11 @@ namespace insur {
       module_spec.moduletypes.push_back(minfo);
 
       cmsswXmlInfo.positions.push_back(modactive_pos);
+
+      count++;
+      rtotal += module.getModuleCap()->getRadiationLength();
+      itotal += module.getModuleCap()->getInteractionLength();
+
         //analyseCompositeElements( hybrid_logic.material_tag, compositeDensity(*module.getModuleCap(), true),
         //  *module.getModuleCap(), true, ss);
       addMaterialToVolume( hybrid_logic.material_tag, module, volumeType::hybrid,
@@ -439,6 +448,13 @@ namespace insur {
                                 + "pixel_test:" + mod_shape.name_tag + "/" + "pixel_test:" + modwafer_shape.name_tag + "/" + 
                                 "pixel_test:" + modactive_shape.name_tag );
     }
+
+    ril.barrel = true;
+    ril.index = LayerNum;
+    ril.rlength = rtotal / (double) count;
+    ril.ilength = itotal / (double) count;
+
+    cmsswXmlInfo.lrilength.push_back (ril);
   }
   void PixelExtractor::createPixelBarrelServices(InactiveSurfaces& inatcvser) {
     //Inactive elements part
@@ -715,6 +731,8 @@ namespace insur {
     module_spec.parameter.first = xml_tkddd_structure;
     module_spec.parameter.second = xml_phaseII_pixecapdet;
 
+    RILengthInfo ril;
+
     std::stringstream emodbox_name;
     emodbox_name << xml_emodbox << ringNo << "Disc" << discno;
     emodbox_shape.name_tag = emodbox_name.str();
@@ -963,6 +981,22 @@ namespace insur {
                             emodwafer_shape.name_tag + "FLIPPED/" +
                             emodactive_shape.name_tag + "FLIPPED" );
      */
+
+    bool pushBackRILength = true;
+    for (const auto &rilength : cmsswXmlInfo.lrilength) {
+      if (!rilength.barrel && rilength.index == discno) {
+        pushBackRILength = false;
+        break;
+      }
+    }
+    if (pushBackRILength) {
+      ril.barrel = false;
+      ril.index = discno;
+      ril.rlength = emodule.getModuleCap()->getRadiationLength();
+      ril.ilength = emodule.getModuleCap()->getInteractionLength();
+
+      cmsswXmlInfo.lrilength.push_back (ril);
+    }
         
     //analyseCompositeElements( ehybrid_logic.material_tag, compositeDensity(*emodule.getModuleCap(), true),
     //    *emodule.getModuleCap(), true);
@@ -1529,6 +1563,16 @@ namespace insur {
                  part.add("<xmlattr>.path",e);
               }
           }
+          for (const auto &rilength : cmsswXmlInfo.lrilength) {
+            if (!rilength.barrel || rilength.index != l)
+              continue;
+            ptree &parRLength = specReco.add("Parameter","");
+            parRLength.add("<xmlattr>.name",xml_recomat_radlength);
+            parRLength.add("<xmlattr>.value",rilength.rlength);
+            ptree &parILength = specReco.add("Parameter","");
+            parILength.add("<xmlattr>.name",xml_recomat_xi);
+            parILength.add("<xmlattr>.value",rilength.ilength);
+          }
       }
       
       std::string pixfwdRecoSpeccommon = "TrackerRecMaterial" + xml_phaseII_pixecap + "Disk";
@@ -1547,7 +1591,17 @@ namespace insur {
                     part.add("<xmlattr>.path",e);
                 }
             }
-         }
+          }
+          for (const auto &rilength : cmsswXmlInfo.lrilength) {
+            if (rilength.barrel || rilength.index != discRingpair[d].first)
+              continue;
+            ptree &parRLength = specReco.add("Parameter","");
+            parRLength.add("<xmlattr>.name",xml_recomat_radlength);
+            parRLength.add("<xmlattr>.value",rilength.rlength);
+            ptree &parILength = specReco.add("Parameter","");
+            parILength.add("<xmlattr>.name",xml_recomat_xi);
+            parILength.add("<xmlattr>.value",rilength.ilength);
+          }
       }
       write_xml(xmlpath+"pixelRecoMaterial_test.xml", tree_recoMat, std::locale(), settings);
   }
