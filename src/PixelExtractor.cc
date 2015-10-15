@@ -479,11 +479,14 @@ namespace insur {
 
     for( auto& bs: bser ) {
 
-      if (!bs.getLocalMasses().size())
-        continue;
-
       std::stringstream sname,matname;
       sname << xml_phaseII_pixbar << xml_base_serf << "R" << (int)(bs.getInnerRadius()) << "Z" << (int)(bs.getZOffset());
+
+      if (!bs.getLocalMasses().size()) {
+        logWARNING ("Composite material " + sname.str() + " has no constituents! Skipping.");
+        continue;
+      }
+
       bser_shape.name_tag = sname.str();
       bser_shape.rmin = bs.getInnerRadius();
       bser_shape.rmax = bs.getInnerRadius() + bs.getRWidth();
@@ -1030,12 +1033,15 @@ namespace insur {
 
     for( auto& bs: bser ) {
 
-      if (!bs.getLocalMasses().size())
-        continue;
-
       std::stringstream sname,matname;
       sname << xml_phaseII_pixecap  << xml_base_serf << "R" << (int)(bs.getInnerRadius())
         << "Z" << (int)( bs.getZOffset() + bs.getZLength() / 2.0 );
+
+      if (!bs.getLocalMasses().size()) {
+        logWARNING ("Composite material " + sname.str() + " has no constituents! Skipping.");
+        continue;
+      }
+
       bser_shape.name_tag = sname.str();
       bser_shape.rmin = bs.getInnerRadius();
       bser_shape.rmax = bs.getInnerRadius() + bs.getRWidth();
