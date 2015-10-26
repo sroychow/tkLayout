@@ -58,16 +58,23 @@ namespace insur {
     std::vector<double> layerRadii;
 
     ModuleROCInfo minfo_zero={}; 
-    SpecParInfo layer_spec,rod_spec;
+    SpecParInfo barrel_spec,layer_spec,rod_spec;
+    //Barrel
+    barrel_spec.name = xml_phaseII_pixbar + xml_par_tail;
+    barrel_spec.parameter.first = xml_tkddd_structure;
+    barrel_spec.parameter.second = xml_phaseII_pixbar;
+    barrel_spec.partselectors.push_back("pixbar:PixelPhase1Barrel");
+    barrel_spec.moduletypes.push_back(minfo_zero);
+
     //Layer
     layer_spec.name = xml_subdet_layer + xml_par_tail;
     layer_spec.parameter.first = xml_tkddd_structure;
-    layer_spec.parameter.second = xml_phaseII_pixbar + xml_layer;
+    layer_spec.parameter.second = xml_subdet_layer;
 
     //Rod
     rod_spec.name = xml_phaseII_pixbar + xml_rod + xml_par_tail;
     rod_spec.parameter.first = xml_tkddd_structure;
-    rod_spec.parameter.second = xml_phaseII_pixbar + xml_rod;
+    rod_spec.parameter.second = xml_subdet_straight_or_tilted_rod;
 
     //have to implement pixel mother volume!!!
     for( int i = 0; i<bLayers->size(); i++ ) {
@@ -203,6 +210,8 @@ namespace insur {
       }
     }
 
+    //barrel
+    cmsswXmlInfo.specs.push_back(barrel_spec);
     //layer
     cmsswXmlInfo.specs.push_back(layer_spec);
     //rod
@@ -253,7 +262,7 @@ namespace insur {
     //Module
     SpecParInfo module_spec;
     module_spec.parameter.first = xml_tkddd_structure;
-    module_spec.parameter.second = xml_phaseII_pixbardet;
+    module_spec.parameter.second = xml_subdet_tobdet_1;
 
     RILengthInfo ril;
     double rtotal = 0.0, itotal = 0.0;
@@ -527,15 +536,21 @@ namespace insur {
     std::vector<std::string> partselectors;
 
     ModuleROCInfo minfo_zero={}; 
-    SpecParInfo disc_spec, ring_spec, module_spec;
+    SpecParInfo endcap_spec, disc_spec, ring_spec, module_spec;
+    //Endcap
+    endcap_spec.name = xml_phaseII_pixecapsubdet + xml_par_tail;
+    endcap_spec.parameter.first = xml_tkddd_structure;
+    endcap_spec.parameter.second = xml_phaseII_pixecapsubdet;
+    endcap_spec.partselectors.push_back("pixfwd:PixelPhase2Endcap");
+    endcap_spec.moduletypes.push_back(minfo_zero);
     // Disk
     disc_spec.name = xml_subdet_wheel + xml_par_tail;
     disc_spec.parameter.first = xml_tkddd_structure;
-    disc_spec.parameter.second = xml_phaseII_pixecap + xml_disc;
+    disc_spec.parameter.second = xml_phaseII_pixfulldisk;
     // Ring
     ring_spec.name = xml_subdet_ring + xml_par_tail;
     ring_spec.parameter.first = xml_tkddd_structure;
-    ring_spec.parameter.second = xml_phaseII_pixecap + "Panel";
+    ring_spec.parameter.second = xml_subdet_ring;
 
     //have to implement pixel mother volume!!!
     for( int i = 0; i<eDisks->size(); i++ ) {
@@ -687,7 +702,7 @@ namespace insur {
         ring_algo.parameter_map[xml_rangeangle]={"360*deg",AlgoPartype::num};
 
         algopar.str("");
-        algopar << (emodules.at(0).center().Phi() + 2 * PI / (double)(ringVec.at(ri).nModules()));
+        algopar << (emodules.at(0).center().Phi() + 2 * M_PI / (double)(ringVec.at(ri).nModules()));
 
         ring_algo.parameter_map[xml_startangle]={algopar.str(),AlgoPartype::num};
 
@@ -711,6 +726,9 @@ namespace insur {
       }
       
     }
+    //endcap
+    cmsswXmlInfo.specs.push_back(endcap_spec);
+
     //disc
     cmsswXmlInfo.specs.push_back(disc_spec);
 
@@ -732,7 +750,7 @@ namespace insur {
     //Module
     SpecParInfo module_spec;//, flip_spec;
     module_spec.parameter.first = xml_tkddd_structure;
-    module_spec.parameter.second = xml_phaseII_pixecapdet;
+    module_spec.parameter.second = xml_subdet_tiddet;
 
     RILengthInfo ril;
 
@@ -1167,7 +1185,7 @@ namespace insur {
   double PixelExtractor::compositeDensity(InactiveElement& ie) {
     double d = ie.getRWidth() + ie.getInnerRadius();
     d = d * d - ie.getInnerRadius() * ie.getInnerRadius();
-    d = 1000 * ie.getTotalMass() / (PI * ie.getZLength() * d);
+    d = 1000 * ie.getTotalMass() / (M_PI * ie.getZLength() * d);
     return d;
   }
 

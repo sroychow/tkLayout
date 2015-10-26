@@ -241,8 +241,11 @@ namespace insur {
     /**
     *Constants required by Pixel Extractor
     */
-    static const std::string xml_phaseII_pixbar = "Phase1PixelBarrel";
-    static const std::string xml_phaseII_pixecap = "Phase2PixelEndcap";
+    static const std::string xml_phaseII_pixbar = "PixelPhase1Barrel";
+    static const std::string xml_phaseII_pixecap = "PixelPhase2Endcap";
+    static const std::string xml_phaseII_pixecapsubdet = "PixelPhase2EndcapSubDet";
+    static const std::string xml_phaseII_pixfulldisk = "PixelPhase2EndcapFullDisk";
+    static const std::string xml_phaseII_pixhalfdisk = "PixelPhase2EndcapReducedDisk";
     static const std::string xml_phaseII_pixbardet = "Phase1PixelBarrelDet";
     static const std::string xml_phaseII_pixecapdet = "Phase2PixelEndcapDet";
     static const std::string xml_phaseII_pixeldetTag = "InnerPixel";
