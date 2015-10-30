@@ -241,6 +241,7 @@ namespace insur {
     /**
     *Constants required by Pixel Extractor
     */
+    static const std::string xml_phaseII_Pixelnamespace = "pixel_test:";//the colon is required
     static const std::string xml_phaseII_pixbar = "Phase1PixelBarrel";
     static const std::string xml_phaseII_pixecap = "Phase2PixelEndcap";
     static const std::string xml_phaseII_pixbardet = "Phase1PixelBarrelDet";
