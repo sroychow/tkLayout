@@ -1360,9 +1360,9 @@ namespace insur {
 
       }
     }
-    //xml_writer_settings<std::string> settings(' ', 1);//for new boost version
-    xml_writer_settings<char> settings(' ', 1);
-    write_xml(xmlpath+"pixel_test.xml", tree, std::locale(), settings);
+    xml_writer_settings<std::string> settings(' ', 1);//for new boost version
+    //xml_writer_settings<char> settings(' ', 1);
+      write_xml(xmlpath+"pixel_test.xml", tree);//, std::locale(), settings);
  
     ///////////////writing pixel structure Topology////////////////////
     std::vector<SpecParInfo>& specs = cmsswXmlInfo.specs;
@@ -1431,7 +1431,7 @@ namespace insur {
         param4.add("<xmlattr>.value", m.rocy);
       } 
     }
-    write_xml(xmlpath+"pixelStructureTopology_test.xml", tree_topo, std::locale(), settings);
+      write_xml(xmlpath+"pixelStructureTopology_test.xml", tree_topo);//, std::locale(), settings);
 
     //sensor portion
     ptree tree_sense;
@@ -1473,7 +1473,7 @@ namespace insur {
     endcap_param2.add("<xmlattr>.name","ReadOutName");
     endcap_param2.add("<xmlattr>.value","TrackerHits" +xml_phaseII_pixecap);
 
-    write_xml(xmlpath+"pixelsens_test.xml", tree_sense, std::locale(), settings);
+      write_xml(xmlpath+"pixelsens_test.xml", tree_sense);//, std::locale(), settings);
     
     //Prodcut portion
     ptree tree_prodCut;
@@ -1539,7 +1539,7 @@ namespace insur {
     sens_param4.add("<xmlattr>.name","ProdCutsForGamma");
     sens_param4.add("<xmlattr>.value","0.01*mm");
 
-    write_xml(xmlpath+"pixelProdCuts_test.xml", tree_prodCut, std::locale(), settings);
+      write_xml(xmlpath+"pixelProdCuts_test.xml", tree_prodCut);//, std::locale(), settings);
  
    //Reco Material
     ptree tree_recoMat;
@@ -1605,6 +1605,6 @@ namespace insur {
             parILength.add("<xmlattr>.value",rilength.ilength);
           }
       }
-      write_xml(xmlpath+"pixelRecoMaterial_test.xml", tree_recoMat, std::locale(), settings);
+      write_xml(xmlpath+"pixelRecoMaterial_test.xml", tree_recoMat);//, std::locale(), settings);
   }
 }//for namespace

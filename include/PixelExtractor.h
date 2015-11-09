@@ -103,6 +103,13 @@ namespace insur {
        double compositeDensity(InactiveElement& ie);
 
        void printXml(mainConfigHandler& mainConfiguration, std::string outsubdir);
+       CMSSWBundle getPixelCMSSWbundle() const { return cmsswXmlInfo;};
+       std::vector<std::string> getPixelbarrelRmatpath() const { return barrelRmatpath;};
+       std::vector<std::string> getPixelendcapRmatpath() const { return ecapRmatpath;};
+       std::vector<std::pair<unsigned int,unsigned int>> getPixeldiscringpair() const {
+           return discRingpair;
+       }
+      unsigned int NBarrelLayers() const { return numBarrelLayers;};
    private:
        std::string whichShape( ShapeType  s );
        unsigned int numBarrelLayers;

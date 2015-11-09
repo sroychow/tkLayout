@@ -16,6 +16,7 @@ namespace insur {
   Squid::Squid() :
       mainConfiguration(mainConfigHandler::instance()),
       t2c(mainConfiguration),
+      t2cfull(mainConfiguration),
       weightDistributionTracker(0.1),
       weightDistributionPixel(0.1) {
     tr = NULL;
@@ -713,8 +714,11 @@ namespace insur {
       logERROR("PixelExtractor could not find the pixel");
     } 
     else {
-      pxt.analyse(pxMaterialCalc.getMaterialTable(),*pm);
-      pxt.printXml(mainConfiguration, xmlout.empty() ? baseName_ : xmlout);
+      //pxt.analyse(pxMaterialCalc.getMaterialTable(),*pm);
+      //pxt.printXml(mainConfiguration, xmlout.empty() ? baseName_ : xmlout);
+      std::cout << "Calling new Translater" << std::endl;
+      t2cfull.translateInnerPixel(pxMaterialCalc.getMaterialTable(), *pm, xmlout.empty() ? baseName_ : xmlout);
+      t2cfull.translateOuterTracker(pxMaterialCalc.getMaterialTable(), *mb, xmlout.empty() ? baseName_ : xmlout);
     }
   }
    
