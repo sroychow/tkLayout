@@ -333,7 +333,7 @@ $(LIBDIR)/MatCalcDummy.o: $(SRCDIR)/MatCalcDummy.cc $(INCDIR)/MatCalcDummy.h
 	@echo "Built target MatCalcDummy.o"
 
 #VISUALISATION
-viz: $(LIBDIR)/Vizard.o $(LIBDIR)/tk2CMSSW.o
+viz: $(LIBDIR)/Vizard.o $(LIBDIR)/tk2CMSSW.o $(LIBDIR)/tk2CMSSWFull.o
 	@echo "Built target 'viz'."
 
 $(LIBDIR)/Vizard.o: $(SRCDIR)/Vizard.cc $(INCDIR)/Vizard.h
@@ -345,6 +345,11 @@ $(LIBDIR)/tk2CMSSW.o: $(SRCDIR)/tk2CMSSW.cc $(INCDIR)/tk2CMSSW.h
 	@echo "Building target tk2CMSSW.o..."
 	$(COMP) $(ROOTFLAGS) -c -o $(LIBDIR)/tk2CMSSW.o $(SRCDIR)/tk2CMSSW.cc
 	@echo "Built target tk2CMSSW.o"
+
+$(LIBDIR)/tk2CMSSWFULL.o: $(SRCDIR)/tk2CMSSWFULL.cc $(INCDIR)/tk2CMSSWFULL.h
+	@echo "Building target tk2CMSSWFULL.o..."
+	$(COMP) $(ROOTFLAGS) -c -o $(LIBDIR)/tk2CMSSWFULL.o $(SRCDIR)/tk2CMSSWFULL.cc
+	@echo "Built target tk2CMSSWFULL.o"
 
 #ANALYSYS
 naly: $(LIBDIR)/Analyzer.o
@@ -423,7 +428,7 @@ $(BINDIR)/tklayout: $(LIBDIR)/tklayout.o $(LIBDIR)/CoordinateOperations.o $(LIBD
 	$(LIBDIR)/XMLWriter.o $(LIBDIR)/IrradiationMap.o $(LIBDIR)/IrradiationMapsManager.o $(LIBDIR)/MaterialTable.o $(LIBDIR)/MaterialBudget.o $(LIBDIR)/MaterialProperties.o \
 	$(LIBDIR)/ModuleCap.o  $(LIBDIR)/InactiveSurfaces.o  $(LIBDIR)/InactiveElement.o $(LIBDIR)/InactiveRing.o \
 	$(LIBDIR)/InactiveTube.o $(LIBDIR)/Usher.o $(LIBDIR)/Materialway.o $(LIBDIR)/MaterialTab.o $(LIBDIR)/WeightDistributionGrid.o $(LIBDIR)/MaterialObject.o $(LIBDIR)/ConversionStation.o $(LIBDIR)/SupportStructure.o $(LIBDIR)/MatCalc.o $(LIBDIR)/MatCalcDummy.o $(LIBDIR)/PlotDrawer.o \
-	$(LIBDIR)/Vizard.o $(LIBDIR)/tk2CMSSW.o $(LIBDIR)/Squid.o $(LIBDIR)/rootweb.o $(LIBDIR)/mainConfigHandler.o \
+	$(LIBDIR)/Vizard.o $(LIBDIR)/tk2CMSSW.o $(LIBDIR)/tk2CMSSWFULL.o $(LIBDIR)/Squid.o $(LIBDIR)/rootweb.o $(LIBDIR)/mainConfigHandler.o \
 	$(LIBDIR)/messageLogger.o $(LIBDIR)/Palette.o $(LIBDIR)/StopWatch.o getRevisionDefine
 	#
 	# Let's make the revision object first
@@ -440,7 +445,7 @@ $(BINDIR)/tklayout: $(LIBDIR)/tklayout.o $(LIBDIR)/CoordinateOperations.o $(LIBD
 	$(LIBDIR)/XMLWriter.o $(LIBDIR)/IrradiationMap.o $(LIBDIR)/IrradiationMapsManager.o $(LIBDIR)/MaterialTable.o $(LIBDIR)/MaterialBudget.o $(LIBDIR)/MaterialProperties.o \
 	$(LIBDIR)/ModuleCap.o $(LIBDIR)/InactiveSurfaces.o $(LIBDIR)/InactiveElement.o $(LIBDIR)/InactiveRing.o \
 	$(LIBDIR)/InactiveTube.o $(LIBDIR)/Usher.o $(LIBDIR)/Materialway.o $(LIBDIR)/MaterialTab.o $(LIBDIR)/WeightDistributionGrid.o $(LIBDIR)/MaterialObject.o $(LIBDIR)/ConversionStation.o $(LIBDIR)/SupportStructure.o $(LIBDIR)/MatCalc.o $(LIBDIR)/MatCalcDummy.o $(LIBDIR)/PlotDrawer.o \
-	$(LIBDIR)/Vizard.o $(LIBDIR)/tk2CMSSW.o $(LIBDIR)/Squid.o $(LIBDIR)/rootweb.o $(LIBDIR)/mainConfigHandler.o \
+	$(LIBDIR)/Vizard.o $(LIBDIR)/tk2CMSSW.o $(LIBDIR)/tk2CMSSWFULL.o $(LIBDIR)/Squid.o $(LIBDIR)/rootweb.o $(LIBDIR)/mainConfigHandler.o \
 	$(LIBDIR)/messageLogger.o $(LIBDIR)/Palette.o $(LIBDIR)/StopWatch.o \
 	$(LIBDIR)/SvnRevision.o \
 	$(LIBDIR)/tklayout.o \
