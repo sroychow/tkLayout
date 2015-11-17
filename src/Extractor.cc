@@ -474,17 +474,14 @@ namespace insur {
     ModuleROCInfo minfo_zero={};
     SpecParInfo rocdims, lspec, rspec, mspec;
     // Layer
-    lspec.name = xml_subdet_layer + xml_par_tail;
+    lspec.name = xml_phaseII_OT + xml_subdet_layer + xml_par_tail;
     lspec.parameter.first = xml_tkddd_structure;
-    lspec.parameter.second = xml_det_layer;
+    lspec.parameter.second = xml_subdet_2OT_layer;
     // Rod
-    rspec.name = xml_subdet_straight_or_tilted_rod + xml_par_tail;
+    rspec.name = xml_phaseII_OT + xml_subdet_straight_or_tilted_rod + xml_par_tail;
     rspec.parameter.first = xml_tkddd_structure;
-    rspec.parameter.second = xml_det_straight_or_tilted_rod;
+    rspec.parameter.second = xml_subdet_straight_or_tilted_rod;
     // Module
-    mspec.name = xml_subdet_tobdet + xml_par_tail;
-    mspec.parameter.first = xml_tkddd_structure;
-    mspec.parameter.second = xml_det_tobdet;
 
 
     // material properties
@@ -789,7 +786,14 @@ namespace insur {
             p.push_back(pos);
 
             // Topology
-            mspec.partselectors.push_back(shape.name_tag);
+            //mspec.name = xml_subdet_tobdet + xml_par_tail;
+            mspec.name = logic.name_tag +  xml_par_tail;
+            mspec.parameter.first = xml_tkddd_structure;
+            mspec.parameter.second = xml_det_tobdet;
+
+            mspec.partselectors.clear();
+            mspec.moduletypes.clear();
+            mspec.partselectors.push_back(logic.name_tag);
 
             minfo.name		= iiter->getModule().moduleType();
             minfo.rocrows	= any2str<int>(iiter->getModule().innerSensor().numROCRows());  // in case of single sensor module innerSensor() and outerSensor() point to the same sensor
@@ -798,8 +802,9 @@ namespace insur {
             minfo.rocy		= any2str<int>(iiter->getModule().innerSensor().numROCY());
 
             mspec.moduletypes.push_back(minfo);
+            t.push_back(mspec);
 
-            if (iiter->getModule().numSensors() == 2) { 
+            if (iiter->getModule().numSensors() == 2) {
 
               xml_base_lowerupper = xml_base_upper;
 
@@ -823,7 +828,13 @@ namespace insur {
               p.push_back(pos);
 
               // Topology
-              mspec.partselectors.push_back(shape.name_tag);
+              mspec.name = logic.name_tag +  xml_par_tail;
+              mspec.parameter.first = xml_tkddd_structure;
+              mspec.parameter.second = xml_det_tobdet;
+                
+              mspec.partselectors.clear();
+              mspec.moduletypes.clear();
+              mspec.partselectors.push_back(logic.name_tag);
 
               minfo.rocrows	= any2str<int>(iiter->getModule().outerSensor().numROCRows());
               minfo.roccols	= any2str<int>(iiter->getModule().outerSensor().numROCCols());
@@ -831,6 +842,7 @@ namespace insur {
               minfo.rocy	= any2str<int>(iiter->getModule().outerSensor().numROCY());
 
               mspec.moduletypes.push_back(minfo);
+              t.push_back(mspec);
               modcomplex.addMaterialInfo(c);
               modcomplex.addShapeInfo(s);
               modcomplex.addLogicInfo(l);
@@ -1141,7 +1153,7 @@ namespace insur {
     }
     if (!lspec.partselectors.empty()) t.push_back(lspec);
     if (!rspec.partselectors.empty()) t.push_back(rspec);
-    if (!mspec.partselectors.empty()) t.push_back(mspec);
+    //if (!mspec.partselectors.empty()) t.push_back(mspec);
   }
   
   /**
@@ -1200,18 +1212,13 @@ namespace insur {
     ModuleROCInfo minfo_zero={}; 
     SpecParInfo rocdims, dspec, rspec, mspec;
     // Disk
-    dspec.name = xml_subdet_wheel + xml_par_tail;
+    dspec.name = xml_phaseII_OT + xml_subdet_wheel + xml_par_tail;
     dspec.parameter.first = xml_tkddd_structure;
-    dspec.parameter.second = xml_det_wheel;
+    dspec.parameter.second = xml_subdet_2OT_wheel;
     // Ring
-    rspec.name = xml_subdet_ring + xml_par_tail;
+    rspec.name = xml_phaseII_OT + xml_subdet_ring + xml_par_tail;
     rspec.parameter.first = xml_tkddd_structure;
-    rspec.parameter.second = xml_det_ring;
-    // Module
-    mspec.name = xml_subdet_tiddet + xml_par_tail;
-    mspec.parameter.first = xml_tkddd_structure;
-    mspec.parameter.second = xml_det_tiddet;
-
+    rspec.parameter.second = xml_subdet_ring;
 
     // material properties
     RILengthInfo ril;
@@ -1452,6 +1459,12 @@ namespace insur {
             p.push_back(pos);
 
             // Topology
+            mspec.name = logic.name_tag + xml_par_tail;
+            mspec.parameter.first = xml_tkddd_structure;
+            mspec.parameter.second = xml_det_tiddet;
+            mspec.partselectors.clear();
+            mspec.moduletypes.clear();
+            //mspec.partselectors.push_back(logic.name_tag);
             mspec.partselectors.push_back(logic.name_tag);
 
             minfo.name		= iiter->getModule().moduleType();
@@ -1461,7 +1474,9 @@ namespace insur {
             minfo.rocy		= any2str<int>(iiter->getModule().innerSensor().numROCY());
 
             mspec.moduletypes.push_back(minfo);
-
+              
+            t.push_back(mspec);
+              
             if (iiter->getModule().numSensors() == 2) {
 
               xml_base_lowerupper = xml_base_upper;
@@ -1487,6 +1502,13 @@ namespace insur {
               p.push_back(pos);
 
               // Topology
+                // Module
+              mspec.name = logic.name_tag + xml_par_tail;
+              mspec.parameter.first = xml_tkddd_structure;
+              mspec.parameter.second = xml_det_tiddet;
+              mspec.partselectors.clear();
+              mspec.moduletypes.clear();
+              //mspec.partselectors.push_back(logic.name_tag);
               mspec.partselectors.push_back(logic.name_tag);
 
               minfo.rocrows	= any2str<int>(iiter->getModule().outerSensor().numROCRows());
@@ -1495,6 +1517,7 @@ namespace insur {
               minfo.rocy		= any2str<int>(iiter->getModule().outerSensor().numROCY());
 
               mspec.moduletypes.push_back(minfo);
+              t.push_back(mspec);
               //mspec.moduletypes.push_back(iiter->getModule().getType());
               modcomplex.addMaterialInfo(c);
               modcomplex.addShapeInfo(s);
@@ -1689,7 +1712,7 @@ namespace insur {
     }
     if (!dspec.partselectors.empty()) t.push_back(dspec);
     if (!rspec.partselectors.empty()) t.push_back(rspec);
-    if (!mspec.partselectors.empty()) t.push_back(mspec);
+    //if (!mspec.partselectors.empty()) t.push_back(mspec);
   }
 
   /**

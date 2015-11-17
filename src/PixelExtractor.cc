@@ -60,7 +60,7 @@ namespace insur {
     ModuleROCInfo minfo_zero={}; 
     SpecParInfo layer_spec,rod_spec;
     //Layer
-    layer_spec.name = xml_subdet_layer + xml_par_tail;
+    layer_spec.name = xml_phaseII_pixbar + xml_layer + xml_par_tail;
     layer_spec.parameter.first = xml_tkddd_structure;
     layer_spec.parameter.second = xml_phaseII_pixbar + xml_layer;
 
@@ -98,7 +98,7 @@ namespace insur {
       layer_logic.material_tag = "materials:Air";
       cmsswXmlInfo.logic.push_back(layer_logic);
 
-      layer_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + layer_logic.name_tag);
+      layer_spec.partselectors.push_back(layer_logic.name_tag);
       layer_spec.moduletypes.push_back(minfo_zero);
 
       PosInfo layer_pos;
@@ -135,7 +135,7 @@ namespace insur {
       rod_logic.material_tag = "materials:Air";
       cmsswXmlInfo.logic.push_back(rod_logic);
 
-      rod_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + rod_logic.name_tag);
+      rod_spec.partselectors.push_back(rod_logic.name_tag);
       rod_spec.moduletypes.push_back(minfo_zero);
       //Rods will be placed with algorithm
       AlgoInfo rod_alg;
@@ -422,7 +422,7 @@ namespace insur {
       cmsswXmlInfo.logic.push_back(modactive_logic);
 
       module_spec.name=modactive_logic.name_tag+"Par";
-      module_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + modactive_logic.name_tag);
+      module_spec.partselectors.push_back(modactive_logic.name_tag);
       minfo.name		= module.moduleType();
       minfo.rocrows	= any2str<int>(module.innerSensor().numROCRows());  // in case of single sensor module innerSensor() and outerSensor() point to the same sensor
       minfo.roccols	= any2str<int>(module.innerSensor().numROCCols());
@@ -529,11 +529,11 @@ namespace insur {
     ModuleROCInfo minfo_zero={}; 
     SpecParInfo disc_spec, ring_spec, module_spec;
     // Disk
-    disc_spec.name = xml_subdet_wheel + xml_par_tail;
+    disc_spec.name = xml_phaseII_pixecap + xml_disc + xml_par_tail;
     disc_spec.parameter.first = xml_tkddd_structure;
     disc_spec.parameter.second = xml_phaseII_pixecap + xml_disc;
     // Ring
-    ring_spec.name = xml_subdet_ring + xml_par_tail;
+    ring_spec.name = xml_phaseII + xml_subdet_ring + xml_par_tail;
     ring_spec.parameter.first = xml_tkddd_structure;
     ring_spec.parameter.second = xml_phaseII_pixecap + "Panel";
 
@@ -569,7 +569,7 @@ namespace insur {
       cmsswXmlInfo.shapes.push_back(disc_shape);
       cmsswXmlInfo.logic.push_back(disc_logic);
 
-      disc_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + disc_logic.name_tag);
+      disc_spec.partselectors.push_back(disc_logic.name_tag);
       disc_spec.moduletypes.push_back(minfo_zero);
 
       cmsswXmlInfo.positions.push_back(disc_pos);
@@ -606,7 +606,7 @@ namespace insur {
         ring_logic.shape_tag = xml_phaseII_Pixelnamespace + ring_shape.name_tag;
         cmsswXmlInfo.logic.push_back(ring_logic); 
 
-        ring_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + ring_logic.name_tag);
+        ring_spec.partselectors.push_back(ring_logic.name_tag);
         ring_spec.moduletypes.push_back(minfo_zero);
 
         PosInfo ring_pos;
@@ -958,7 +958,7 @@ namespace insur {
     //cmsswXmlInfo.positions.push_back(flip_pos);
 
     module_spec.name = emodactive_logic.name_tag + "Par";
-    module_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + emodactive_logic.name_tag);
+    module_spec.partselectors.push_back(emodactive_logic.name_tag);
     minfo.name		= emodule.moduleType();
     minfo.rocrows	= any2str<int>(emodule.innerSensor().numROCRows());  // in case of single sensor module innerSensor() and outerSensor() point to the same sensor
     minfo.roccols	= any2str<int>(emodule.innerSensor().numROCCols());

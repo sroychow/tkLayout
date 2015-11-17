@@ -75,13 +75,24 @@ namespace insur {
                                   std::string outsubdir);
 
         void writeMaterialSection( ptree& tree, const std::vector<Element>& elements,
-                                   const std::vector<Composite>& composites, const string label);
+                                   const std::vector<Composite>& composites,
+                                   const string label, const string nameSpace);
         void writeSolidSection( ptree& tree, const std::vector<ShapeInfo>& shapes, const string label);
         void writeRotationSection( ptree& tree, const string label);
         void writeLogicalPartSection( ptree& tree, const std::vector<LogicalInfo>& logic, const string label);
         void writePosPartSection( ptree& tree, const std::vector<PosInfo>& positions,
                                   const std::vector<AlgoInfo>& algos,const string label);
-        void writeAlgorithmPixel( ptree& tree, const std::vector<AlgoInfo>& algos,const string label);
+        void writeStructureTopology( ptree& tree_topo, const std::vector<SpecParInfo>& specs, const string& nameSpace,
+                                     std::vector<std::string>& barrel_partselectors,
+                                     std::vector<std::string>& endcap_partselectors);
+        void writeSens( ptree& tree_sense, const string& nameSpace,
+                        const string& barrelDet, const string& endcapDet,
+                        std::vector<std::string>& barrel_partselectors,
+                        std::vector<std::string>& endcap_partselectors);
+        void writeProdCuts( ptree& tree_prodCut, const string& nameSpace,
+                       const string& barrelDet, const string& endcapDet,
+                       std::vector<std::string>& barrel_partselectors,
+                       std::vector<std::string>& endcap_partselectors);
     };
 }
 #endif	/* _TK2CMSSW_H */

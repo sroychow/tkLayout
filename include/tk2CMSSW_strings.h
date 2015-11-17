@@ -238,9 +238,12 @@ namespace insur {
     static const std::string xml_zv3 = "[Zv3]";
     static const std::string xml_root_radius = "[RootRadius]";
     static const std::string xml_track_beam_r2 = "[cms:TrackBeamR2]";
+    static const std::string xml_phaseII_OTrackernamespace = "tracker:";
+    static const std::string xml_phaseII_OT = "OuterTracker";
     /**
     *Constants required by Pixel Extractor
     */
+    static const std::string xml_phaseII = "Phase2";
     static const std::string xml_phaseII_Pixelnamespace = "pixel_test:";//the colon is required
     static const std::string xml_phaseII_pixbar = "Phase1PixelBarrel";
     static const std::string xml_phaseII_pixecap = "Phase2PixelEndcap";
