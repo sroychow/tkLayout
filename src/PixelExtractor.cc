@@ -101,11 +101,11 @@ namespace insur {
 
       LogicalInfo layer_logic;
       layer_logic.name_tag = layer_shape.name_tag;
-      layer_logic.shape_tag = "pixel_test:" + layer_shape.name_tag;
+      layer_logic.shape_tag = xml_phaseII_Pixelnamespace + layer_shape.name_tag;
       layer_logic.material_tag = "materials:Air";
       cmsswXmlInfo.logic.push_back(layer_logic);
 
-      layer_spec.partselectors.push_back("pixel_test:" + layer_logic.name_tag);
+      layer_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + layer_logic.name_tag);
       layer_spec.moduletypes.push_back(minfo_zero);
 
       PosInfo layer_pos;
@@ -138,20 +138,20 @@ namespace insur {
 
       LogicalInfo rod_logic;
       rod_logic.name_tag = rod_shape.name_tag;
-      rod_logic.shape_tag = "pixel_test:" + rod_shape.name_tag;
+      rod_logic.shape_tag = xml_phaseII_Pixelnamespace + rod_shape.name_tag;
       rod_logic.material_tag = "materials:Air";
       cmsswXmlInfo.logic.push_back(rod_logic);
 
-      rod_spec.partselectors.push_back("pixel_test:" + rod_logic.name_tag);
+      rod_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + rod_logic.name_tag);
       rod_spec.moduletypes.push_back(minfo_zero);
       //Rods will be placed with algorithm
       AlgoInfo rod_alg;
 
       rod_alg.name = xml_phialt_algo;
-      rod_alg.parent = "pixel_test:" + layer_shape.name_tag;
+      rod_alg.parent = xml_phaseII_Pixelnamespace + layer_shape.name_tag;
       std::stringstream par,parmap;
 
-      rod_alg.parameter_map["ChildName"] = {"pixel_test:" + rod_shape.name_tag,AlgoPartype::st};
+      rod_alg.parameter_map["ChildName"] = {xml_phaseII_Pixelnamespace + rod_shape.name_tag,AlgoPartype::st};
 
       rod_alg.parameter_map["Tilt"] = {"90*deg",AlgoPartype::num};
 
@@ -204,8 +204,8 @@ namespace insur {
       if( r.myid() == 1) {
           std::stringstream barrelRmatpathCommon;
           barrelRmatpathCommon << "//pixbar:" << xml_phaseII_pixbar << "/"
-                               << "pixel_test:" + layer_shape.name_tag << "/"
-                               << "pixel_test:" + rod_shape.name_tag << "/";
+                               << xml_phaseII_Pixelnamespace + layer_shape.name_tag << "/"
+                               << xml_phaseII_Pixelnamespace + rod_shape.name_tag << "/";
         getPixelBarrelModuleInfo( rod_modules ,i+1,rod_shape.name_tag,rod_rmin, rod_dR, barrelRmatpathCommon.str());
       }
     }
@@ -252,7 +252,7 @@ namespace insur {
 
     PosInfo modbox_pos,mod_pos,modwafer_pos,modactive_pos,hybrid_pos,chip_pos;
 
-    modbox_pos.parent_tag = "pixel_test:" + rodName;
+    modbox_pos.parent_tag = xml_phaseII_Pixelnamespace + rodName;
     //mod_pos.parent_tag = rodName;
     //hybrid_pos.parent_tag = rodName;
 
@@ -306,24 +306,24 @@ namespace insur {
 
 
       modbox_logic.name_tag = modbox_shape.name_tag;
-      modbox_logic.shape_tag = "pixel_test:" + modbox_shape.name_tag;
+      modbox_logic.shape_tag = xml_phaseII_Pixelnamespace + modbox_shape.name_tag;
       modbox_logic.material_tag = "materials:Air";
 
       mod_logic.name_tag = mod_shape.name_tag;
-      mod_logic.shape_tag = "pixel_test:" + mod_shape.name_tag;
+      mod_logic.shape_tag = xml_phaseII_Pixelnamespace + mod_shape.name_tag;
       mod_logic.material_tag = "materials:Air";
 
 
       hybrid_logic.name_tag = hybrid_shape.name_tag;
-      hybrid_logic.shape_tag = "pixel_test:" + hybrid_shape.name_tag;
+      hybrid_logic.shape_tag = xml_phaseII_Pixelnamespace + hybrid_shape.name_tag;
       stringstream hybrid_logic_mat;
-      hybrid_logic_mat << "pixel_test:topInactiveComposite" << xml_barrel_module << i+1 << xml_layer << LayerNum ;
+      hybrid_logic_mat << xml_phaseII_Pixelnamespace << "topInactiveComposite" << xml_barrel_module << i+1 << xml_layer << LayerNum ;
       hybrid_logic.material_tag = hybrid_logic_mat.str();
 
       chip_logic.name_tag = chip_shape.name_tag;
-      chip_logic.shape_tag = "pixel_test:" + chip_shape.name_tag;
+      chip_logic.shape_tag = xml_phaseII_Pixelnamespace + chip_shape.name_tag;
       stringstream chip_logic_mat;
-      chip_logic_mat << "pixel_test:bottomInactiveComposite" << xml_barrel_module << i+1 << xml_layer << LayerNum ;
+      chip_logic_mat << xml_phaseII_Pixelnamespace << "bottomInactiveComposite" << xml_barrel_module << i+1 << xml_layer << LayerNum ;
       chip_logic.material_tag = chip_logic_mat.str();
 
 
@@ -345,7 +345,7 @@ namespace insur {
       chip_pos.trans.dy = 0.;
       chip_pos.trans.dz = -modbox_shape.dz + chip_shape.dz;
       chip_pos.child_tag = chip_logic.shape_tag;
-      chip_pos.parent_tag = "pixel_test:" + modbox_shape.name_tag;
+      chip_pos.parent_tag = xml_phaseII_Pixelnamespace + modbox_shape.name_tag;
 
       mod_pos.copy = 1;
       //  ss << "ModRho=" << zplusmod.center().Rho() << " rod_rmin + rod_dR/2.=" << rod_rmin + rod_dR/2.  << std::endl;
@@ -357,14 +357,14 @@ namespace insur {
       mod_pos.trans.dy = 0.0;
       mod_pos.trans.dz = chip_pos.trans.dz + chip_shape.dz + mod_shape.dz;
       mod_pos.child_tag = mod_logic.shape_tag;
-      mod_pos.parent_tag = "pixel_test:" + modbox_shape.name_tag;
+      mod_pos.parent_tag = xml_phaseII_Pixelnamespace + modbox_shape.name_tag;
  
       hybrid_pos.copy = 1;
       hybrid_pos.trans.dx = 0.;
       hybrid_pos.trans.dy = 0.;
       hybrid_pos.trans.dz = mod_pos.trans.dz + mod_shape.dz + hybrid_shape.dz;
       hybrid_pos.child_tag = hybrid_logic.shape_tag;
-      hybrid_pos.parent_tag = "pixel_test:" + modbox_shape.name_tag;
+      hybrid_pos.parent_tag = xml_phaseII_Pixelnamespace + modbox_shape.name_tag;
 
       if( module.flipped() ) modbox_pos.rotref = xml_places_flipped_mod_in_rod;
 
@@ -393,8 +393,8 @@ namespace insur {
 
 
       modwafer_logic.name_tag = modwafer_shape.name_tag;
-      modwafer_logic.shape_tag = "pixel_test:" + modwafer_shape.name_tag;
-      modwafer_logic.material_tag = "pixel_test:SenSi";//??or air
+      modwafer_logic.shape_tag = xml_phaseII_Pixelnamespace + modwafer_shape.name_tag;
+      modwafer_logic.material_tag = xml_phaseII_Pixelnamespace + "SenSi";//??or air
 
       modwafer_pos.copy = 1;
       modwafer_pos.trans.dx = 0.;
@@ -413,8 +413,8 @@ namespace insur {
 
 
       modactive_logic.name_tag = modactive_shape.name_tag;
-      modactive_logic.shape_tag = "pixel_test:" + modactive_shape.name_tag;
-      modactive_logic.material_tag = "pixel_test:SenSi";
+      modactive_logic.shape_tag = xml_phaseII_Pixelnamespace + modactive_shape.name_tag;
+      modactive_logic.material_tag = xml_phaseII_Pixelnamespace + "SenSi";
 
       modactive_pos.copy = 1;
       modactive_pos.trans.dx = 0.;
@@ -431,7 +431,7 @@ namespace insur {
       cmsswXmlInfo.logic.push_back(modactive_logic);
 
       module_spec.name=modactive_logic.name_tag+"Par";
-      module_spec.partselectors.push_back("pixel_test:" + modactive_logic.name_tag);
+      module_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + modactive_logic.name_tag);
       minfo.name		= module.moduleType();
       minfo.rocrows	= any2str<int>(module.innerSensor().numROCRows());  // in case of single sensor module innerSensor() and outerSensor() point to the same sensor
       minfo.roccols	= any2str<int>(module.innerSensor().numROCCols());
@@ -453,9 +453,9 @@ namespace insur {
                            (8.*chip_shape.dx*chip_shape.dy*chip_shape.dz/1000.));
       cmsswXmlInfo.specs.push_back(module_spec);
               
-      barrelRmatpath.push_back( barrelRmatpathCommon + "pixel_test:" + modbox_shape.name_tag +"/" 
-                                + "pixel_test:" + mod_shape.name_tag + "/" + "pixel_test:" + modwafer_shape.name_tag + "/" + 
-                                "pixel_test:" + modactive_shape.name_tag );
+      barrelRmatpath.push_back( barrelRmatpathCommon + xml_phaseII_Pixelnamespace + modbox_shape.name_tag +"/" 
+                                + xml_phaseII_Pixelnamespace + mod_shape.name_tag + "/" + xml_phaseII_Pixelnamespace + modwafer_shape.name_tag + "/" + 
+                                xml_phaseII_Pixelnamespace + modactive_shape.name_tag );
     }
 
     ril.barrel = true;
@@ -507,7 +507,7 @@ namespace insur {
         << "R" << (int)(bs.getInnerRadius())
         << "Z" << (int)(bs.getZLength());
       bser_logic.name_tag = sname.str();
-      bser_logic.shape_tag = "pixel_test:" + sname.str();
+      bser_logic.shape_tag = xml_phaseII_Pixelnamespace + sname.str();
       bser_logic.material_tag = matname.str();
 
       cmsswXmlInfo.logic.push_back(bser_logic);
@@ -569,7 +569,7 @@ namespace insur {
 
       LogicalInfo disc_logic; 
       disc_logic.name_tag = disc_shape.name_tag;
-      disc_logic.shape_tag = "pixel_test:" + disc_shape.name_tag;
+      disc_logic.shape_tag = xml_phaseII_Pixelnamespace + disc_shape.name_tag;
       disc_logic.material_tag = "materials:Air";
 
       PosInfo disc_pos;
@@ -577,14 +577,14 @@ namespace insur {
       disc_pos.trans.dx = 0.0;
       disc_pos.trans.dy = 0.0;
       //will the mod+hybrid fit inside the disc thickness?check!!
-      disc_pos.trans.dz = ( eDisks->at(i)->maxZ() + eDisks->at(i)->minZ() ) / 2.0;// - xml_z_pixfwd;
+      disc_pos.trans.dz = ( eDisks->at(i)->maxZ() + eDisks->at(i)->minZ() ) / 2.0 - xml_z_pixfwd;
       disc_pos.parent_tag = "pixfwd:" + xml_phaseII_pixecap;
       disc_pos.child_tag = disc_logic.shape_tag;
 
       cmsswXmlInfo.shapes.push_back(disc_shape);
       cmsswXmlInfo.logic.push_back(disc_logic);
 
-      disc_spec.partselectors.push_back("pixel_test:" + disc_logic.name_tag);
+      disc_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + disc_logic.name_tag);
       disc_spec.moduletypes.push_back(minfo_zero);
 
       cmsswXmlInfo.positions.push_back(disc_pos);
@@ -618,16 +618,16 @@ namespace insur {
         cmsswXmlInfo.shapes.push_back(ring_shape);
 
         ring_logic.name_tag = ring_shape.name_tag;
-        ring_logic.shape_tag = "pixel_test:" + ring_shape.name_tag;
+        ring_logic.shape_tag = xml_phaseII_Pixelnamespace + ring_shape.name_tag;
         cmsswXmlInfo.logic.push_back(ring_logic); 
 
-        ring_spec.partselectors.push_back("pixel_test:" + ring_logic.name_tag);
+        ring_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + ring_logic.name_tag);
         ring_spec.moduletypes.push_back(minfo_zero);
 
         PosInfo ring_pos;
         ring_pos.copy = 1;
-        ring_pos.parent_tag = "pixel_test:" + disc_shape.name_tag;
-        ring_pos.child_tag = "pixel_test:" + ring_logic.name_tag;
+        ring_pos.parent_tag = xml_phaseII_Pixelnamespace + disc_shape.name_tag;
+        ring_pos.child_tag = xml_phaseII_Pixelnamespace + ring_logic.name_tag;
         ring_pos.trans.dx = 0.;
         ring_pos.trans.dy = 0.;
         if( emodules.at(0).center().Z() < (eDisks->at(i)->maxZ() + eDisks->at(i)->minZ()) / 2.0 )
@@ -639,8 +639,8 @@ namespace insur {
         //Endcap Module Info
         std::stringstream ecapRmatpathCommon;
           ecapRmatpathCommon << "//pixfwd:" << xml_phaseII_pixecap << "/"
-          << "pixel_test:" + disc_shape.name_tag << "/"
-          << "pixel_test:" + ring_shape.name_tag << "/";
+          << xml_phaseII_Pixelnamespace <<  disc_shape.name_tag << "/"
+          << xml_phaseII_Pixelnamespace <<  ring_shape.name_tag << "/";
         getPixelEndcapModuleInfo( emodules.at(0) ,ri+1, i+1,ring_shape.name_tag, ring_shape.dz, 0.,ecapRmatpathCommon.str());
 
         AlgoInfo ring_algo;
@@ -649,7 +649,7 @@ namespace insur {
         std::stringstream emodname,algopar;
         emodname << xml_emodbox << ri+1 << "Disc" << i+1;
 
-        algopar << "pixel_test:" + emodname.str();
+        algopar << xml_phaseII_Pixelnamespace <<  emodname.str();
         ring_algo.parameter_map[xml_childparam] = {algopar.str(),AlgoPartype::st};
 
         algopar.str("");
@@ -688,7 +688,7 @@ namespace insur {
 
         ring_algo.parameters.clear();
 
-        algopar<< "pixel_test:" + emodname.str();
+        algopar<< xml_phaseII_Pixelnamespace <<  emodname.str();
         ring_algo.parameter_map[xml_childparam] = {algopar.str(),AlgoPartype::st};     
 
         algopar.str(""); 
@@ -818,7 +818,7 @@ namespace insur {
 
     //*************Logical Volumes**********//
     emodbox_logic.name_tag = emodbox_shape.name_tag;
-    emodbox_logic.shape_tag = "pixel_test:" + emodbox_shape.name_tag;
+    emodbox_logic.shape_tag = xml_phaseII_Pixelnamespace + emodbox_shape.name_tag;
     emodbox_logic.material_tag = "materials:Air";
     cmsswXmlInfo.logic.push_back(emodbox_logic);
     //flip_logic = emodbox_logic;
@@ -827,7 +827,7 @@ namespace insur {
     //cmsswXmlInfo.logic.push_back(flip_logic);
      
     emod_logic.name_tag = emod_shape.name_tag;
-    emod_logic.shape_tag = "pixel_test:" + emod_shape.name_tag;
+    emod_logic.shape_tag = xml_phaseII_Pixelnamespace + emod_shape.name_tag;
     emod_logic.material_tag = "materials:Air";
     cmsswXmlInfo.logic.push_back(emod_logic);
     //flip_logic = emod_logic;
@@ -836,9 +836,9 @@ namespace insur {
     //cmsswXmlInfo.logic.push_back(flip_logic);
 
     ehybrid_logic.name_tag = ehybrid_shape.name_tag;
-    ehybrid_logic.shape_tag = "pixel_test:" + ehybrid_shape.name_tag;
+    ehybrid_logic.shape_tag = xml_phaseII_Pixelnamespace + ehybrid_shape.name_tag;
     stringstream ehybrid_logic_mat;
-    ehybrid_logic_mat << "pixel_test:topInactiveCompositeEModule" << ringNo << "Disc" << discno;
+    ehybrid_logic_mat << xml_phaseII_Pixelnamespace << "topInactiveCompositeEModule" << ringNo << "Disc" << discno;
     ehybrid_logic.material_tag = ehybrid_logic_mat.str();
     cmsswXmlInfo.logic.push_back(ehybrid_logic);
     //flip_logic = ehybrid_logic;
@@ -847,9 +847,10 @@ namespace insur {
     //cmsswXmlInfo.logic.push_back(flip_logic);
 
     chip_logic.name_tag = chip_shape.name_tag;
-    chip_logic.shape_tag = "pixel_test:" + chip_shape.name_tag;
+    chip_logic.shape_tag = xml_phaseII_Pixelnamespace + chip_shape.name_tag;
     stringstream chip_logic_mat;
-    chip_logic_mat << "pixel_test:bottomInactiveCompositeEModule" << ringNo << "Disc" << discno;
+    chip_logic_mat << xml_phaseII_Pixelnamespace 
+                   << "bottomInactiveCompositeEModule" << ringNo << "Disc" << discno;
     chip_logic.material_tag = chip_logic_mat.str();
     cmsswXmlInfo.logic.push_back(chip_logic);
     //flip_logic = chip_logic;
@@ -859,7 +860,7 @@ namespace insur {
 
 
     chip_pos.copy = 1;
-    chip_pos.parent_tag = "pixel_test:" + emodbox_shape.name_tag;
+    chip_pos.parent_tag = xml_phaseII_Pixelnamespace + emodbox_shape.name_tag;
     chip_pos.trans.dx = 0.;
     chip_pos.trans.dy = 0.;
     chip_pos.trans.dz = -emodbox_shape.dz + chip_shape.dz;
@@ -872,7 +873,7 @@ namespace insur {
     //cmsswXmlInfo.positions.push_back(flip_pos);
 
     emod_pos.copy = 1;
-    emod_pos.parent_tag = "pixel_test:" + emodbox_shape.name_tag;
+    emod_pos.parent_tag = xml_phaseII_Pixelnamespace + emodbox_shape.name_tag;
     emod_pos.trans.dx = 0.;
     emod_pos.trans.dy = 0.;
     emod_pos.trans.dz = chip_pos.trans.dz + chip_shape.dz + emod_shape.dz;
@@ -885,7 +886,7 @@ namespace insur {
     //cmsswXmlInfo.positions.push_back(flip_pos);
 
     ehybrid_pos.copy = 1;
-    ehybrid_pos.parent_tag = "pixel_test:" + emodbox_shape.name_tag;
+    ehybrid_pos.parent_tag = xml_phaseII_Pixelnamespace + emodbox_shape.name_tag;
     ehybrid_pos.trans.dx = 0.;
     ehybrid_pos.trans.dy = 0.;
     ehybrid_pos.trans.dz = emod_pos.trans.dz + emod_shape.dz + ehybrid_shape.dz;
@@ -929,8 +930,8 @@ namespace insur {
     //cmsswXmlInfo.shapes.push_back(flip_shape);//flip module
 
     emodwafer_logic.name_tag = emodwafer_shape.name_tag;
-    emodwafer_logic.shape_tag = "pixel_test:" + emodwafer_shape.name_tag;
-    emodwafer_logic.material_tag = "pixel_test:SenSi";//??or air
+    emodwafer_logic.shape_tag = xml_phaseII_Pixelnamespace + emodwafer_shape.name_tag;
+    emodwafer_logic.material_tag = xml_phaseII_Pixelnamespace + "SenSi";//??or air
     cmsswXmlInfo.logic.push_back(emodwafer_logic);
     //flip_logic = emodwafer_logic;
     //flip_logic.name_tag = emodwafer_logic.name_tag + "FLIPPED";
@@ -939,8 +940,8 @@ namespace insur {
 
 
     emodactive_logic.name_tag = emodactive_shape.name_tag;
-    emodactive_logic.shape_tag = "pixel_test:" + emodactive_shape.name_tag;
-    emodactive_logic.material_tag = "pixel_test:SenSi";
+    emodactive_logic.shape_tag = xml_phaseII_Pixelnamespace + emodactive_shape.name_tag;
+    emodactive_logic.material_tag = xml_phaseII_Pixelnamespace + "SenSi";
     cmsswXmlInfo.logic.push_back(emodactive_logic);
     //flip_logic = emodactive_logic;
     //flip_logic.name_tag = emodactive_logic.name_tag + "FLIPPED";
@@ -975,7 +976,7 @@ namespace insur {
     //cmsswXmlInfo.positions.push_back(flip_pos);
 
     module_spec.name = emodactive_logic.name_tag + "Par";
-    module_spec.partselectors.push_back("pixel_test:" + emodactive_logic.name_tag);
+    module_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + emodactive_logic.name_tag);
     minfo.name		= emodule.moduleType();
     minfo.rocrows	= any2str<int>(emodule.innerSensor().numROCRows());  // in case of single sensor module innerSensor() and outerSensor() point to the same sensor
     minfo.roccols	= any2str<int>(emodule.innerSensor().numROCCols());
@@ -991,17 +992,10 @@ namespace insur {
     //cmsswXmlInfo.specs.push_back(flip_spec);
 
     ecapRmatpath.push_back( ecapRmatpathCommon +
-                            "pixel_test:" + emodbox_shape.name_tag + "/" +
-                            "pixel_test:" + emod_shape.name_tag + "/" +
-                            "pixel_test:" + emodwafer_shape.name_tag + "/" +
-                            "pixel_test:" + emodactive_shape.name_tag );
-
-    /*ecapRmatpath.push_back( ecapRmatpathCommon + "/" +
-                            emodbox_shape.name_tag + "FLIPPED/" +
-                            emod_shape.name_tag + "FLIPPED/" +
-                            emodwafer_shape.name_tag + "FLIPPED/" +
-                            emodactive_shape.name_tag + "FLIPPED" );
-     */
+                            xml_phaseII_Pixelnamespace + emodbox_shape.name_tag + "/" +
+                            xml_phaseII_Pixelnamespace + emod_shape.name_tag + "/" +
+                            xml_phaseII_Pixelnamespace + emodwafer_shape.name_tag + "/" +
+                            xml_phaseII_Pixelnamespace + emodactive_shape.name_tag );
 
     bool pushBackRILength = true;
     for (const auto &rilength : cmsswXmlInfo.lrilength) {
@@ -1072,7 +1066,7 @@ namespace insur {
         << "Z" << (int)(bs.getZLength());
 
       bser_logic.name_tag = sname.str();
-      bser_logic.shape_tag = "pixel_test:" + sname.str();
+      bser_logic.shape_tag = xml_phaseII_Pixelnamespace + sname.str();
       bser_logic.material_tag = matname.str();
 
       cmsswXmlInfo.logic.push_back(bser_logic);
@@ -1236,7 +1230,7 @@ namespace insur {
           ptree& elem = comp.add("MaterialFraction", "");
           elem.add("<xmlattr>.fraction",e.second);
           ptree& m = elem.add("rMaterial", "");
-          m.add("<xmlattr>.name", "pixel_test:" + e.first);
+          m.add("<xmlattr>.name", xml_phaseII_Pixelnamespace + e.first);
     
           }
     }
@@ -1427,8 +1421,10 @@ namespace insur {
 
     for( auto& s: specs ) {
       if( s.name.find("Module") == std::string::npos )                 continue;
-      else if( s.name.find("BModule") != std::string::npos )      barrel_partselectors.push_back("pixel_test:" + s.name);
-      else if( s.name.find("EModule") != std::string::npos )      endcap_partselectors.push_back("pixel_test:" + s.name);
+      else if( s.name.find("BModule") != std::string::npos )      
+        barrel_partselectors.push_back(xml_phaseII_Pixelnamespace + s.name);
+      else if( s.name.find("EModule") != std::string::npos )      
+        endcap_partselectors.push_back(xml_phaseII_Pixelnamespace + s.name);
       ptree& spec = specParSec.add("SpecPar","");
       spec.add("<xmlattr>.name",s.name);  
       for( auto& p: s.partselectors ) {
