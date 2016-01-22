@@ -52,7 +52,7 @@
    <ZSection z="[RootEndZ]"    rMin="[cms:TrackBeamR2]" rMax="111.105*cm"/>
    <ZSection z="[RootEndZ]+[ZextensionCables]"    rMin="[cms:TrackBeamR2]" rMax="111.105*cm"/>
 </Polycone>
- <Polycone name="PixelPhase2Endcap" startPhi="0*deg" deltaPhi="360*deg" >
+ <Polycone name="Phase2PixelEndcap" startPhi="0*deg" deltaPhi="360*deg" >
  <ZSection z="[RootStartZ]"  rMin="[cms:TrackBeamR1]" rMax="[RootRadius]"/>
  <ZSection z="[RootMidZ1]"   rMin="[cms:TrackBeamR1]" rMax="[RootRadius]"/>
  <ZSection z="[RootMidZ1]"   rMin="[cms:TrackLumiR1]" rMax="[RootRadius]"/>
@@ -63,7 +63,7 @@
  </Polycone>
     <SubtractionSolid name="Phase2OTForward">
       <rSolid name="Forward"/>
-      <rSolid name="PixelPhase2Endcap"/>
+      <rSolid name="Phase2PixelEndcap"/>
       <Translation x="0*cm" y="0*cm" z="0*cm"/>
     </SubtractionSolid>
 
@@ -83,8 +83,8 @@
 </SolidSection>
 --> 
 <LogicalPartSection label="pixfwd.xml">
- <LogicalPart name="PixelPhase2Endcap" category="envelope">
-  <rSolid name="PixelPhase2Endcap"/>
+ <LogicalPart name="Phase2PixelEndcap" category="envelope">
+  <rSolid name="Phase2PixelEndcap"/>
   <rMaterial name="materials:Air"/>
  </LogicalPart>
  <LogicalPart name="Phase2OTForward" category="envelope">
