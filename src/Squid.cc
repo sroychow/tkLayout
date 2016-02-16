@@ -70,7 +70,12 @@ namespace insur {
     }
     startTaskClock("Building tracker and pixel");
     std::stringstream ss;
-    includeSet_ = mainConfiguration.preprocessConfiguration(ifs, ss, getGeometryFile());
+    ConfigInputOutput mainConfig(ifs, ss);
+    mainConfig.absoluteFileName=getGeometryFile();
+    mainConfig.relativeFileName=getGeometryFile();
+    mainConfig.standardInclude=false;
+    mainConfig.webOutput = webOutput;
+    mainConfiguration.preprocessConfiguration(mainConfig);
     t2c.addConfigFile(tk2CMSSW::ConfigFile{getGeometryFile(), ss.str()});
     using namespace boost::property_tree;
     ptree pt;
@@ -105,8 +110,8 @@ namespace insur {
            << m.dsDistance() << sep << m.thickness() << sep 
            << m.minWidth() << sep << m.maxWidth() << sep << m.length() << sep
            << m.moduleType() << sep
-           << m.resolutionLocalX() << sep << m.resolutionLocalY() << sep 
-           << m.numStripsAcross() << sep << m.innerSensor().numSegments() << sep << m.outerSensor().numSegments() << std::endl;
+           << m.nominalResolutionLocalX() << sep << m.nominalResolutionLocalY() << sep 
+           << m.numStripsAcrossEstimate() << sep << m.innerSensor().numSegmentsEstimate() << sep << m.outerSensor().numSegmentsEstimate() << std::endl;
       }
     };
     */
@@ -137,6 +142,18 @@ namespace insur {
         logERROR(ss);
       }
 
+      // Look for tag "Support" not associated with a concrete Tracker and build supports
+      childRange = getChildRange(pt, "Support");
+      std::for_each(childRange.first, childRange.second, [&](const ptree::value_type& kv) {
+
+        Support* support = new Support();
+        support->myid(kv.second.get_value(0));
+        support->store(kv.second);
+        support->build();
+        supports_.push_back(support);
+      });
+
+      // Read simulation parameters
       simParms_ = new SimParms();
 
       //iter between the default irradiation files vector and add each to simParm
@@ -426,7 +443,6 @@ namespace insur {
       stopTaskClock();
       return false;
     }
-
     if (addLogPage) {
       v.makeLogPage(site);
     }
@@ -474,7 +490,7 @@ namespace insur {
    * @param tracks The number of tracks that should be fanned out across the analysed region
    * @return True if there were no errors during processing, false otherwise
    */
-  bool Squid::pureAnalyzeMaterialBudget(int tracks, bool triggerResolution) {
+  bool Squid::pureAnalyzeMaterialBudget(int tracks, bool triggerResolution, bool debugResolution) {
     if (mb) {
 //      startTaskClock(!trackingResolution ? "Analyzing material budget" : "Analyzing material budget and estimating resolution");
       // TODO: insert the creation of sample tracks here, to compute intersections only once
@@ -500,7 +516,18 @@ namespace insur {
                                 mainConfiguration.getMomenta(),
                                 mainConfiguration.getTriggerMomenta(),
                                 mainConfiguration.getThresholdProbabilities(),
+				false,
+				debugResolution,
                                 tracks, pm);
+	if (pm) {
+	  pixelAnalyzer.analyzeTaggedTracking(*pm,
+					      mainConfiguration.getMomenta(),
+					      mainConfiguration.getTriggerMomenta(),
+					      mainConfiguration.getThresholdProbabilities(),
+					      true,
+					      debugResolution,
+					      tracks, NULL);
+	}
         stopTaskClock();
       }
       return true;
@@ -514,11 +541,11 @@ namespace insur {
    * Produces the output of the analysis of the geomerty analysis
    * @return True if there were no errors during processing, false otherwise
    */
-  bool Squid::reportGeometrySite() {
+  bool Squid::reportGeometrySite(bool debugResolution) {
     if (tr) {
       startTaskClock("Creating geometry report");
-      v.geometrySummary(a, *tr, *simParms_, is, site);
-      if (px) v.geometrySummary(pixelAnalyzer, *px, *simParms_, pi, site, "pixel");
+      v.geometrySummary(a, *tr, *simParms_, is, site, debugResolution);
+      if (px) v.geometrySummary(pixelAnalyzer, *px, *simParms_, pi, site, debugResolution, "pixel");
       stopTaskClock();
       return true;
     } else {
@@ -604,6 +631,7 @@ namespace insur {
       v.errorSummary(a, site, "trigger", true);
 #else
       v.taggedErrorSummary(a, site);
+      v.taggedErrorSummary(pixelAnalyzer, site);
 #endif
       stopTaskClock();
       return true;
@@ -644,7 +672,7 @@ namespace insur {
       return false;
     } else {
       startTaskClock("Saving additional information");
-      v.additionalInfoSite(includeSet_, getSettingsFile(),
+      v.additionalInfoSite(getSettingsFile(),
                            a, pixelAnalyzer, *tr, *simParms_, site);
       stopTaskClock();
       return true;
