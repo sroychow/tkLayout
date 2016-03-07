@@ -62,8 +62,8 @@ namespace insur {
     //Barrel
     barrel_spec.name = xml_phaseII_pixbar + xml_par_tail;
     barrel_spec.parameter.first = xml_tkddd_structure;
-    barrel_spec.parameter.second = xml_phaseII_pixbar;
-    barrel_spec.partselectors.push_back("pixbar:PixelPhase1Barrel");
+    barrel_spec.parameter.second = "PixelPhase1Barrel";
+    barrel_spec.partselectors.push_back("pixbar:" + xml_phaseII_pixbar);
     barrel_spec.moduletypes.push_back(minfo_zero);
 
     //Layer
@@ -94,7 +94,6 @@ namespace insur {
       std::vector<std::pair<double, double> > temp;
       layer_shape.rzup=temp;
       layer_shape.rzdown=temp;
-      cmsswXmlInfo.shapes.push_back(layer_shape);
 
       layerRadii.push_back(layer_shape.rmin);
       layerRadii.push_back(layer_shape.rmax);
@@ -119,6 +118,13 @@ namespace insur {
 
       //Rod
       const RodPair& r = bLayers->at(i)->rods().at(0);
+      double rodRMin = r.minR();
+      double rodRMax = r.maxR();
+      for( auto& rr : bLayers->at(i)->rods() ) {
+        if( rr.minR() < rodRMin ) rodRMin = rr.minR();
+        if( rr.maxR() > rodRMax ) rodRMax = rr.maxR();
+      }
+
       std::pair<const BmoduleContainer&,const BmoduleContainer&> mods = r.modules();
       auto& zplusmod = mods.first.at(0);
       double mod0Thick = zplusmod.sensorThickness() + zplusmod.hybridThickness();
@@ -129,13 +135,25 @@ namespace insur {
       rod_shape.type = bx;
       rod_shape.name_tag = stemp_Rod.str();
       //explicitly added module thickness twice to remind that chip thickness = module thickness
-      rod_shape.dx = mods.first.at(0).thickness()/2. + mods.first.at(0).hybridThickness()/2. + + mods.first.at(0).thickness()/2.;
+      rod_shape.dx = mods.first.at(0).thickness()/2. + mods.first.at(0).hybridThickness()/2. + mods.first.at(0).thickness()/2.;
       rod_shape.dy = zplusmod.area() /zplusmod.length() / 2.0;//mod0Thick;
       rod_shape.dz = r.maxZ();
       rod_shape.rmin = 0.;
       rod_shape.rmax = 0.;
-      cmsswXmlInfo.shapes.push_back(rod_shape);
 
+      layer_shape.rmin = bLayers->at(i)->minR() - rod_shape.dx - xml_pixel_layeroffset - xml_epsilon;
+      layer_shape.rmax = bLayers->at(i)->maxR() + rod_shape.dx + xml_pixel_layeroffset + xml_epsilon;
+      layer_shape.dz = rod_shape.dz + xml_epsilon;
+      std::cout << "LayerRmin=" << bLayers->at(i)->minR() - rod_shape.dx
+                << "\tLayerRmax=" << bLayers->at(i)->maxR() + rod_shape.dx
+                << "\tModCenter=" << zplusmod.center().Rho() /2.
+                << "\tminR=" << rodRMin
+                << "\tmaxR=" << rodRMax
+                << std::endl;
+        
+      cmsswXmlInfo.shapes.push_back(layer_shape);
+      cmsswXmlInfo.shapes.push_back(rod_shape);
+      
       LogicalInfo rod_logic;
       rod_logic.name_tag = rod_shape.name_tag;
       rod_logic.shape_tag = xml_phaseII_Pixelnamespace + rod_shape.name_tag;
@@ -163,11 +181,11 @@ namespace insur {
 
       //not correct !chk extractor.cc//use rod minR,maxR
 
-      parmap << layer_shape.rmin;
+      parmap << rodRMin;
       rod_alg.parameter_map["RadiusIn"] = {parmap.str(),AlgoPartype::num};
       parmap.str("");
 
-      parmap << layer_shape.rmax;
+      parmap << rodRMax;
       rod_alg.parameter_map["RadiusOut"] = {parmap.str(),AlgoPartype::num};
       parmap.str("");
 
@@ -263,10 +281,6 @@ namespace insur {
     SpecParInfo module_spec;
     module_spec.parameter.first = xml_tkddd_structure;
     module_spec.parameter.second = xml_subdet_tobdet_1;
-
-    RILengthInfo ril;
-    double rtotal = 0.0, itotal = 0.0;
-    unsigned count = 0;
 
     RILengthInfo ril;
     double rtotal = 0.0, itotal = 0.0;
@@ -516,7 +530,7 @@ namespace insur {
 
       cmsswXmlInfo.logic.push_back(bser_logic);
 
-      bser_pos.parent_tag = "pixbar:" + xml_phaseII_pixbar;
+      bser_pos.parent_tag = xml_phaseII_Pixelnamespace + xml_phaseII_pixmotherVolume;
       bser_pos.child_tag = bser_logic.shape_tag;
       bser_pos.trans.dz = bs.getZOffset() + bser_shape.dz;
 
@@ -545,7 +559,7 @@ namespace insur {
     endcap_spec.name = xml_phaseII_pixecapsubdet + xml_par_tail;
     endcap_spec.parameter.first = xml_tkddd_structure;
     endcap_spec.parameter.second = xml_phaseII_pixecapsubdet;
-    endcap_spec.partselectors.push_back("pixfwd:PixelPhase2Endcap");
+    endcap_spec.partselectors.push_back(xml_pixfwdident + ":" + xml_phaseII_pixecap);
     endcap_spec.moduletypes.push_back(minfo_zero);
     // Disk
     disc_spec.name = xml_subdet_wheel + xml_par_tail;
@@ -582,7 +596,7 @@ namespace insur {
       disc_pos.trans.dy = 0.0;
       //will the mod+hybrid fit inside the disc thickness?check!!
       disc_pos.trans.dz = ( eDisks->at(i)->maxZ() + eDisks->at(i)->minZ() ) / 2.0 - xml_z_pixfwd;
-      disc_pos.parent_tag = "pixfwd:" + xml_phaseII_pixecap;
+      disc_pos.parent_tag = xml_pixfwdident + ":" + xml_phaseII_pixecap;
       disc_pos.child_tag = disc_logic.shape_tag;
 
       cmsswXmlInfo.shapes.push_back(disc_shape);
@@ -625,7 +639,7 @@ namespace insur {
         ring_logic.shape_tag = xml_phaseII_Pixelnamespace + ring_shape.name_tag;
         cmsswXmlInfo.logic.push_back(ring_logic); 
 
-        ring_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + ring_logic.name_tag);
+        //ring_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + ring_logic.name_tag);
         ring_spec.moduletypes.push_back(minfo_zero);
 
         PosInfo ring_pos;
@@ -642,9 +656,12 @@ namespace insur {
 
         //Endcap Module Info
         std::stringstream ecapRmatpathCommon;
-          ecapRmatpathCommon << "//pixfwd:" << xml_phaseII_pixecap << "/"
+          ecapRmatpathCommon << "//" + xml_pixfwdident + ":" << xml_phaseII_pixecap << "/"
           << xml_phaseII_Pixelnamespace <<  disc_shape.name_tag << "/"
           << xml_phaseII_Pixelnamespace <<  ring_shape.name_tag << "/";
+        std::stringstream mboxname;
+        mboxname << xml_emodbox << ri +1  << "Disc" << i+1;
+        ring_spec.partselectors.push_back(xml_phaseII_Pixelnamespace + mboxname.str());
         getPixelEndcapModuleInfo( emodules.at(0) ,ri+1, i+1,ring_shape.name_tag, ring_shape.dz, 0.,ecapRmatpathCommon.str());
 
         AlgoInfo ring_algo;
@@ -755,8 +772,6 @@ namespace insur {
     SpecParInfo module_spec;//, flip_spec;
     module_spec.parameter.first = xml_tkddd_structure;
     module_spec.parameter.second = xml_subdet_tiddet;
-
-    RILengthInfo ril;
 
     RILengthInfo ril;
 
@@ -1243,7 +1258,16 @@ namespace insur {
 
     ptree& solidSec = tree.add("DDDefinition.SolidSection", "");
     solidSec.add("<xmlattr>.label", "pixel.xml");
-     
+    //Defining the pixel mother volume
+    ptree& mSolid = solidSec.add("UnionSolid", "");
+    mSolid.add("<xmlattr>.name",xml_phaseII_pixmotherVolume);
+    mSolid.add("<xmlattr>.firstSolid",xml_pixfwdident + ":" + xml_phaseII_pixecap);
+    mSolid.add("<xmlattr>.secondSolid",xml_pixbarident + ":" + xml_phaseII_pixbar);
+    ptree& mTranslation = mSolid.add("Translation","");
+    mTranslation.add("<xmlattr>.x","0*cm");
+    mTranslation.add("<xmlattr>.y","0*cm");
+    mTranslation.add("<xmlattr>.z","0*cm");
+    
     for( auto& s: shapes) {
         if( s.type == ShapeType::bx ) {
         ptree& solid = solidSec.add("Box", "");
@@ -1306,6 +1330,14 @@ namespace insur {
       
     ptree& logicSec = tree.add("DDDefinition.LogicalPartSection", "");
     logicSec.add("<xmlattr>.label", "pixel.xml");
+    
+    ptree& mLogic = logicSec.add("LogicalPart", "");
+    mLogic.add("<xmlattr>.name", xml_phaseII_pixmotherVolume);
+    mLogic.add("<xmlattr>.category", "unspecified");
+    ptree& mRsolid = mLogic.add("rSolid","");
+    mRsolid.add("<xmlattr>.name", xml_phaseII_Pixelnamespace + xml_phaseII_pixmotherVolume);
+    ptree& mRmat = mLogic.add("rMaterial","");
+    mRmat.add("<xmlattr>.name","materials:Air");
 
     for( auto& l: logic) {
       ptree& logical = logicSec.add("LogicalPart","");
@@ -1322,6 +1354,15 @@ namespace insur {
 
     ptree& posSec = tree.add("DDDefinition.PosPartSection", "");
     posSec.add("<xmlattr>.label", "pixel.xml");
+    
+    ptree& mPosition = posSec.add("PosPart","");
+    mPosition.add("<xmlattr>.copyNumber","1");
+      
+    ptree& mParent = mPosition.add("rParent","");
+    mParent.add("<xmlattr>.name","tracker:Tracker");
+      
+    ptree& mChild = mPosition.add("rChild","");
+    mChild.add("<xmlattr>.name",xml_phaseII_Pixelnamespace + xml_phaseII_pixmotherVolume);
 
     for( auto& p: positions) {
 
@@ -1386,7 +1427,7 @@ namespace insur {
     }
     //xml_writer_settings<std::string> settings(' ', 1);//for new boost version
     xml_writer_settings<char> settings(' ', 1);
-    write_xml(xmlpath+"pixel_test.xml", tree, std::locale(), settings);
+    write_xml( xmlpath+"pixel_test.xml", tree, std::locale(), settings);
  
     ///////////////writing pixel structure Topology////////////////////
     std::vector<SpecParInfo>& specs = cmsswXmlInfo.specs;

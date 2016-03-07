@@ -5311,15 +5311,19 @@ namespace insur {
             // assign current file name to current_file and echo it out to the console.
             std::string current_file =dir_iter->path().filename().string();
             std::cout << current_file << "\tpath=" << dir_iter->path().string() << std::endl;
-             if( current_file.find(".xml") != std::string::npos ) {
+            std::cout << "Point 1" << std::endl;
+            if( current_file.find(".xml") != std::string::npos ) {
+              std::cout << "Point 2" << std::endl;
               boost::filesystem::copy_file( dir_iter->path(),
                                             layoutdir + current_file,
                                             boost::filesystem::copy_option::overwrite_if_exists);
+              std::cout << "Point 3" << std::endl;
               if( current_file.find("pixel") != std::string::npos )
                 pixelxmlfilenames.push_back(current_file);
               else 
                 trackerxmlfilenames.push_back(current_file);
-             }
+            }
+             
         }
       }
     }
