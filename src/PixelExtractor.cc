@@ -582,7 +582,7 @@ namespace insur {
       disc_shape.name_tag = stemp.str();
       disc_shape.rmin = eDisks->at(i)->minR();
       disc_shape.rmax = eDisks->at(i)->maxR();
-      disc_shape.dz = eDisks->at(i)->thickness()/2.;
+      disc_shape.dz = eDisks->at(i)->thickness()/2. + xml_epsilon;
 
 
       LogicalInfo disc_logic; 
@@ -628,7 +628,10 @@ namespace insur {
         rname << "Ring" << ri+1 << disc_shape.name_tag;
         ring_shape.name_tag = rname.str();
         //explicitly added mod thickness twice to remind that chip thickness= mod thickness
-        ring_shape.dz = eDisks->at(i)->maxRingThickness() / 2.0 + emodules.at(0).hybridThickness()/2. + eDisks->at(i)->maxRingThickness() / 2.0;
+        double modBoxthickness = 2.*emodules.at(0).thickness() / 2.0 +
+                                 emodules.at(0).hybridThickness()/2.;//actually half-thickness
+        ring_shape.dz = eDisks->at(i)->maxRingThickness()/2. + modBoxthickness + xml_epsilon;
+          
         ring_shape.rmin = emodules.at(0).minR();//minR of ring = minR of mod
         ring_shape.rmax = emodules.at(0).maxR();//maxR for mod > maxR for ring. But ring has to house the mod.So!!
 
@@ -697,7 +700,7 @@ namespace insur {
         ring_algo.vecpar.nEntries="3";
         ring_algo.vecpar.values.push_back(0);
         ring_algo.vecpar.values.push_back(0);
-        ring_algo.vecpar.values.push_back(ring_shape.dz - emodules.at(0).thickness() / 2.0); 
+        ring_algo.vecpar.values.push_back(ring_shape.dz - modBoxthickness);
 
         ring_algo.parameter_map[xml_iszplus]={"1",AlgoPartype::num};
         ring_algo.parameter_map[xml_tiltangle]={"90*deg",AlgoPartype::num};
@@ -1425,8 +1428,8 @@ namespace insur {
 
       }
     }
-    //xml_writer_settings<std::string> settings(' ', 1);//for new boost version
-    xml_writer_settings<char> settings(' ', 1);
+    xml_writer_settings<std::string> settings(' ', 1);//for new boost version
+    //xml_writer_settings<char> settings(' ', 1);
     write_xml( xmlpath+"pixel_test.xml", tree, std::locale(), settings);
  
     ///////////////writing pixel structure Topology////////////////////

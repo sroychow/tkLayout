@@ -5301,7 +5301,12 @@ namespace insur {
     RootWPage* myPage = new RootWPage("XML");
     myPage->setAddress("xml.html");
     site.addPage(myPage);
-
+        
+        boost::filesystem::path layDir(layoutdir);
+        std::cout << "Layout dir path=" << layoutdir << "  "
+                  << boost::filesystem::exists(layDir)
+                  << boost::filesystem::create_directory(layDir)
+        << std::endl;
     std::vector<std::string> pixelxmlfilenames,trackerxmlfilenames;
     boost::filesystem::path xmlDirectory(xmldir);
     boost::filesystem::directory_iterator end_iter;
@@ -5318,7 +5323,7 @@ namespace insur {
                                             layoutdir + current_file,
                                             boost::filesystem::copy_option::overwrite_if_exists);
               std::cout << "Point 3" << std::endl;
-              if( current_file.find("pixel") != std::string::npos )
+              if( current_file.find("pix") != std::string::npos )
                 pixelxmlfilenames.push_back(current_file);
               else 
                 trackerxmlfilenames.push_back(current_file);
