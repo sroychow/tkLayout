@@ -700,7 +700,7 @@ namespace insur {
         ring_algo.vecpar.nEntries="3";
         ring_algo.vecpar.values.push_back(0);
         ring_algo.vecpar.values.push_back(0);
-        ring_algo.vecpar.values.push_back(ring_shape.dz - modBoxthickness);
+        ring_algo.vecpar.values.push_back(ring_shape.dz - modBoxthickness - xml_epsilon);
 
         ring_algo.parameter_map[xml_iszplus]={"1",AlgoPartype::num};
         ring_algo.parameter_map[xml_tiltangle]={"90*deg",AlgoPartype::num};
@@ -739,7 +739,7 @@ namespace insur {
         ring_algo.vecpar.values.clear();
         ring_algo.vecpar.values.push_back(0);
         ring_algo.vecpar.values.push_back(0);
-        ring_algo.vecpar.values.push_back(emodules.at(0).thickness() / 2.0 - ring_shape.dz); 
+        ring_algo.vecpar.values.push_back(modBoxthickness - ring_shape.dz + xml_epsilon ); 
         //push the flipped child module
         //copy numbers are even
         ring_algo.parameter_map[xml_iszplus]={"1",AlgoPartype::num};
@@ -1428,8 +1428,8 @@ namespace insur {
 
       }
     }
-    xml_writer_settings<std::string> settings(' ', 1);//for new boost version
-    //xml_writer_settings<char> settings(' ', 1);
+    //xml_writer_settings<std::string> settings(' ', 1);//for new boost version
+    xml_writer_settings<char> settings(' ', 1);
     write_xml( xmlpath+"pixel_test.xml", tree, std::locale(), settings);
  
     ///////////////writing pixel structure Topology////////////////////
