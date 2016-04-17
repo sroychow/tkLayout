@@ -5301,12 +5301,17 @@ namespace insur {
     RootWPage* myPage = new RootWPage("XML");
     myPage->setAddress("xml.html");
     site.addPage(myPage);
+<<<<<<< HEAD
         
         boost::filesystem::path layDir(layoutdir);
         std::cout << "Layout dir path=" << layoutdir << "  "
                   << boost::filesystem::exists(layDir)
                   << boost::filesystem::create_directory(layDir)
         << std::endl;
+=======
+    if (!boost::filesystem::exists(layoutdir)) { boost::filesystem::create_directory(layoutdir); }
+
+>>>>>>> first-sight implementation for solving : XMLs are not stored properly in the www layout directory
     std::vector<std::string> pixelxmlfilenames,trackerxmlfilenames;
     boost::filesystem::path xmlDirectory(xmldir);
     boost::filesystem::directory_iterator end_iter;
